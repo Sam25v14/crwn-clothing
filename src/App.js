@@ -1,44 +1,53 @@
-import React from 'react';
-import { Switch, Route } from 'react-router-dom';
-import './App.css';
-import Header from './components/header/header.component';
-import { connect } from 'react-redux';
+import React from "react";
+import { Switch, Route } from "react-router-dom";
+import "./App.css";
+import Header from "./components/header/header.component";
+import { connect } from "react-redux";
 
-import ShopPage from './pages/shop/shop.component';
-import HomePage from './pages/homepage/homepage.component';
-import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component';
+import ShopPage from "./pages/shop/shop.component";
+import HomePage from "./pages/homepage/homepage.component";
+import SignInAndSignUpPage from "./pages/sign-in-and-sign-up/sign-in-and-sign-up.component";
 
 import { selectCurrentUser } from "./redux/user/user.selectors";
-import { auth, createUserProfileDocument } from './firebase/firebase.utils';
-import { onSnapshot } from 'firebase/firestore';
-import { setCurrentUser } from './redux/user/user.actions';
-import { Redirect } from 'react-router-dom';
+import {
+  auth,
+  createUserProfileDocument,
+  // addCollectionAndDocuments,
+} from "./firebase/firebase.utils";
+import { onSnapshot } from "firebase/firestore";
+import { setCurrentUser } from "./redux/user/user.actions";
+import { Redirect } from "react-router-dom";
 import { createStructuredSelector } from "reselect";
-import CheckoutPage from './pages/checkout/checkout.component';
+// import { selectCollectionsForPreview } from "./redux/shop/shop.selectors";
+import CheckoutPage from "./pages/checkout/checkout.component";
 
 class App extends React.Component {
   unsubscribeFromAuth = null;
 
   componentDidMount() {
     const { setCurrentUser } = this.props;
-
-    this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+    
+    this.unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
       if (userAuth) {
         const userRef = await createUserProfileDocument(userAuth);
-        onSnapshot(userRef, snapShot => {
+        onSnapshot(userRef, (snapShot) => {
           setCurrentUser({
             id: snapShot.id,
-            ...snapShot.data()
-          })
-        })
+            ...snapShot.data(),
+          });
+        });
       }
 
       setCurrentUser(userAuth);
+      // addCollectionAndDocuments(
+      //   "collections",
+      //   collectionsArray.map(({ title, items }) => ({ title, items }))
+      // );
     });
   }
 
   componentWillUnmount() {
-    if(this.unsubscribeFromAuth) this.unsubscribeFromAuth();
+    if (this.unsubscribeFromAuth) this.unsubscribeFromAuth();
   }
 
   render() {
@@ -46,12 +55,19 @@ class App extends React.Component {
       <div>
         <Header />
         <Switch>
-          <Route exact path='/' component={HomePage} />
-          <Route path='/shop' component={ShopPage} />
-          <Route exact path='/checkout' component={CheckoutPage} />
+          <Route exact path="/" component={HomePage} />
+          <Route path="/shop" component={ShopPage} />
+          <Route exact path="/checkout" component={CheckoutPage} />
           <Route
-            exact path='/signin'
-            render={() => this.props.currentUser ? (<Redirect to="/" />) : (<SignInAndSignUpPage />)}
+            exact
+            path="/signin"
+            render={() =>
+              this.props.currentUser ? (
+                <Redirect to="/" />
+              ) : (
+                <SignInAndSignUpPage />
+              )
+            }
           />
         </Switch>
       </div>
@@ -60,11 +76,12 @@ class App extends React.Component {
 }
 
 const mapStateToProps = createStructuredSelector({
-  currentUser: selectCurrentUser
-})
+  currentUser: selectCurrentUser,
+  // collectionsArray: selectCollectionsForPreview,
+});
 
-const mapDispatchToProps = dispatch => ({
-  setCurrentUser: user => dispatch(setCurrentUser(user))
-})
+const mapDispatchToProps = (dispatch) => ({
+  setCurrentUser: (user) => dispatch(setCurrentUser(user)),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
