@@ -1,9 +1,8 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
-import { getLanguageCode } from "utils/urlUtils";
 
 const oneTrustCookie = (props) => {
-  const langCode = getLanguageCode();
+  const langCode = "en";
 
   return (
     <>
