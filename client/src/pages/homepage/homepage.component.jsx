@@ -14,9 +14,6 @@ const HomePage = () => {
   return (
     <HomePageContainer>
       <p>{userAgents}</p>
-      <p>{appCodeName}</p>
-      <p>{appName}</p>
-      <p>{product}</p>
       <Directory />
     </HomePageContainer>
   );
