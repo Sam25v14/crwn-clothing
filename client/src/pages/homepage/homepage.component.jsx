@@ -9,11 +9,9 @@ const HomePage = () => {
   );
   const userAgents = userAgentsArray.join(" ");
 
-  const { appCodeName, appName, product } = window.navigator;
-
   return (
     <HomePageContainer>
-      <p>{userAgents}</p>
+      {userAgents}
       <Directory />
     </HomePageContainer>
   );
