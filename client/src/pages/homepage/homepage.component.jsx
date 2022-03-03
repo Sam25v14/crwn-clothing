@@ -5,6 +5,7 @@ import { HomePageContainer } from "./homepage.styles";
 
 const HomePage = () => (
   <HomePageContainer>
+    {window.navigator.userAgent}
     <Directory />
   </HomePageContainer>
 );
