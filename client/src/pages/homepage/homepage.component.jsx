@@ -5,7 +5,7 @@ import { HomePageContainer } from "./homepage.styles";
 
 const HomePage = () => {
   const userAgentsArray = window.navigator.userAgentData.brands.map(
-    ({ brand }) => brand
+    ({ brand }) => { return brand; }
   );
   const userAgents = userAgentsArray.join(" ");
 
