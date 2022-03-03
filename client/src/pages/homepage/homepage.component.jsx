@@ -11,7 +11,6 @@ const HomePage = () => {
 
   return (
     <HomePageContainer>
-      {userAgents}
       <Directory />
     </HomePageContainer>
   );
