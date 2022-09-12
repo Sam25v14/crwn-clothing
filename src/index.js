@@ -14,6 +14,8 @@ import { store, persistor } from "./redux/store";
 // import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 // import reportWebVitals from './reportWebVitals';
 
+import { resolvers, typeDefs } from "./graphql/resolvers";
+
 const httpLink = createHttpLink({
   uri: "https://crwn-clothing.com",
 });
@@ -23,6 +25,16 @@ const cache = new InMemoryCache();
 const client = new ApolloClient({
   link: httpLink,
   cache,
+  typeDefs,
+  resolvers
+});
+
+client.writeData({
+  data: {
+    cartHidden: true,
+    cartItems: [],
+    itemCount: 0
+  }
 });
 
 ReactDOM.render(
